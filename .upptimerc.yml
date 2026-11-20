@@ -1,10 +1,12 @@
 # KeivApp service status: https://status.keiv.app and the "Status" page of keiv.app, which reads
 # history/summary.json and the issues labelled "status" (keiv.app repo, inc/status.php).
 #
-# NOT RUNNING YET: GitHub Actions are disabled in this repository until production
-# (app.keiv.app) starts; staging sits behind a password and is not for customers. To start:
-# add the GH_PAT secret (a token of the owner, never in this file), enable Actions, add the DNS
-# record status.keiv.app (CNAME to apm24-development.github.io).
+# STAGING FOR NOW (20.11.2026): the checks point at test.keiv.app (the app's staging, public) and
+# keiv.app (the site, behind the staging password, so 401 means up). At the production start:
+# switch the URLs to app.keiv.app and keiv.app with 200, and keiv.app clears "Pomiary od" so
+# staging days do not count.
+# Running needs the GH_PAT secret (a token of the owner, never in this file) and Actions enabled.
+# DNS status.keiv.app (CNAME to apm24-development.github.io) is for the GitHub Pages site.
 #
 # The slugs are labels of incidents too (keiv.app reads them): keep them short and do not rename.
 owner: apm24-development
@@ -13,30 +15,32 @@ repo: keiv-status
 sites:
   - name: Panel KeivApp
     slug: panel
-    url: https://app.keiv.app/api/health
+    url: https://test.keiv.app/api/health
     expectedStatusCodes: [200]
   - name: Logowanie
     slug: logowanie
-    url: https://app.keiv.app/login
+    url: https://test.keiv.app/login
     expectedStatusCodes: [200]
-  # The platform and AI checks read the app's public status (marketing_app, /api/public/status,
-  # to be built): 200 with "degraded" in the body is a slowdown, any other code an outage.
-  - name: Wysyłka zmian do Allegro
-    slug: allegro
-    url: https://app.keiv.app/api/public/status/allegro
-    __dangerous__body_degraded: degraded
-  - name: Wysyłka zmian do Kauflandu
-    slug: kaufland
-    url: https://app.keiv.app/api/public/status/kaufland
-    __dangerous__body_degraded: degraded
-  - name: Generowanie treści AI
-    slug: ai
-    url: https://app.keiv.app/api/public/status/ai
-    __dangerous__body_degraded: degraded
   - name: Strona keiv.app
     slug: strona
     url: https://keiv.app/
-    expectedStatusCodes: [200]
+    # Staging password: 401 is the site answering. 200 at the production start.
+    expectedStatusCodes: [401]
+  # Allegro, Kaufland and AI read the app's public status (marketing_app #379,
+  # /api/public/status/<service>): 200 with "degraded" in the body is a slowdown, any other code
+  # an outage. Added once staging runs a version with that endpoint (main ba3f24f or later):
+  # - name: Wysyłka zmian do Allegro
+  #   slug: allegro
+  #   url: https://test.keiv.app/api/public/status/allegro
+  #   __dangerous__body_degraded: degraded
+  # - name: Wysyłka zmian do Kauflandu
+  #   slug: kaufland
+  #   url: https://test.keiv.app/api/public/status/kaufland
+  #   __dangerous__body_degraded: degraded
+  # - name: Generowanie treści AI
+  #   slug: ai
+  #   url: https://test.keiv.app/api/public/status/ai
+  #   __dangerous__body_degraded: degraded
 
 status-website:
   cname: status.keiv.app
