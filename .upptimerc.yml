@@ -1,31 +1,50 @@
-# Change these first
-owner: upptime # Your GitHub organization or username, where this repository lives
-repo: upptime # The name of this repository
+# KeivApp service status: https://status.keiv.app and the "Status" page of keiv.app, which reads
+# history/summary.json and the issues labelled "status" (keiv.app repo, inc/status.php).
+#
+# NOT RUNNING YET: GitHub Actions are disabled in this repository until production
+# (app.keiv.app) starts; staging sits behind a password and is not for customers. To start:
+# add the GH_PAT secret (a token of the owner, never in this file), enable Actions, add the DNS
+# record status.keiv.app (CNAME to apm24-development.github.io).
+#
+# The slugs are labels of incidents too (keiv.app reads them): keep them short and do not rename.
+owner: apm24-development
+repo: keiv-status
 
 sites:
-  - name: Google
-    url: https://www.google.com
-  - name: Wikipedia
-    url: https://en.wikipedia.org
-  - name: Hacker News
-    url: https://news.ycombinator.com
-  - name: Secret Site
-    url: $SECRET_SITE
+  - name: Panel KeivApp
+    slug: panel
+    url: https://app.keiv.app/api/health
+    expectedStatusCodes: [200]
+  - name: Logowanie
+    slug: logowanie
+    url: https://app.keiv.app/login
+    expectedStatusCodes: [200]
+  # The platform and AI checks read the app's public status (marketing_app, /api/public/status,
+  # to be built): 200 with "degraded" in the body is a slowdown, any other code an outage.
+  - name: Wysyłka zmian do Allegro
+    slug: allegro
+    url: https://app.keiv.app/api/public/status/allegro
+    __dangerous__body_degraded: degraded
+  - name: Wysyłka zmian do Kauflandu
+    slug: kaufland
+    url: https://app.keiv.app/api/public/status/kaufland
+    __dangerous__body_degraded: degraded
+  - name: Generowanie treści AI
+    slug: ai
+    url: https://app.keiv.app/api/public/status/ai
+    __dangerous__body_degraded: degraded
+  - name: Strona keiv.app
+    slug: strona
+    url: https://keiv.app/
+    expectedStatusCodes: [200]
 
 status-website:
-  # Add your custom domain name, or remove the `cname` line if you don't have a domain
-  # Uncomment the `baseUrl` line if you don't have a custom domain and add your repo name there
-  cname: demo.upptime.js.org
-  # baseUrl: /your-repo-name
-  logoUrl: https://raw.githubusercontent.com/upptime/upptime.js.org/master/static/img/icon.svg
-  name: Upptime
-  introTitle: "**Upptime** is the open-source uptime monitor and status page, powered entirely by GitHub."
-  introMessage: This is a sample status page which uses **real-time** data from our [GitHub repository](https://github.com/upptime/upptime). No server required — just GitHub Actions, Issues, and Pages. [**Get your own for free**](https://github.com/upptime/upptime)
+  cname: status.keiv.app
+  name: KeivApp
+  introTitle: "Stan usług KeivApp"
+  introMessage: "Sprawdzamy usługi co 5 minut, poza naszymi serwerami. Opisy awarii i prac znajdziesz poniżej."
   navbar:
     - title: Status
       href: /
-    - title: GitHub
-      href: https://github.com/$OWNER/$REPO
-
-# Upptime also supports notifications, assigning issues, and more
-# See https://upptime.js.org/docs/configuration
+    - title: keiv.app
+      href: https://keiv.app/
