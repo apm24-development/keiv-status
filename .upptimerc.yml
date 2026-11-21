@@ -5,8 +5,10 @@
 # keiv.app (the site, behind the staging password, so 401 means up). At the production start:
 # switch the URLs to app.keiv.app and keiv.app with 200, and keiv.app clears "Pomiary od" so
 # staging days do not count.
-# Running needs the GH_PAT secret (a token of the owner, never in this file) and Actions enabled.
-# DNS status.keiv.app (CNAME to apm24-development.github.io) is for the GitHub Pages site.
+# Running since 21.11.2026: the GH_PAT secret (a fine-grained token of the owner, only this repo,
+# until 20.11.2027; never in this file) and Actions enabled. Renew the token before it expires.
+# DNS status.keiv.app (CNAME to apm24-development.github.io) is for the GitHub Pages site; until
+# it exists only the keiv.app "Status" page shows the results.
 #
 # The slugs are labels of incidents too (keiv.app reads them): keep them short and do not rename.
 owner: apm24-development
